@@ -10,7 +10,33 @@ export const TMDB_CONFIG = {
 export const fetchPopularMovies = async ({ query }: { query: string }) => {
   const endpoint = query
     ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-    : `${TMDB_CONFIG.BASE_URL}/discover/movie?&with_original_language=ta&sort_by=popularity.desc`;
+    : `${TMDB_CONFIG.BASE_URL}/discover/movie?&sort_by=popularity.desc`;
+  // &with_original_language=ta
+
+  const response = await fetch(endpoint, {
+    method: "GET",
+    headers: TMDB_CONFIG.headers,
+  });
+
+  if (!response.ok) {
+    // @ts-ignore
+    throw new Error("Failed to Fetch Movies", response.statusText);
+  }
+
+  const data = await response.json();
+
+  return data.results;
+};
+
+export const fetchPopularTeluguMovies = async ({
+  query,
+}: {
+  query: string;
+}) => {
+  const endpoint = query
+    ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+    : `${TMDB_CONFIG.BASE_URL}/discover/movie?&sort_by=popularity.desc`;
+  // &with_original_language=te
 
   const response = await fetch(endpoint, {
     method: "GET",
